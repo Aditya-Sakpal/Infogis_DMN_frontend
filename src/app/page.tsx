@@ -1,40 +1,86 @@
 import React from 'react'
 
+const Card = ({ title, inputs, gradient, buttonBgColor, buttonHoverColor }) => {
+  return (
+    <div className='w-[25%] h-[40%] shadow-2xl rounded-xl m-[2%] transition-all duration-300 hover:shadow-xl'>
+      <div className={`w-[100%] h-[20%] ${gradient} flex justify-center items-center rounded-t-xl`}>
+        <h1 className='text-2xl font-semibold text-white'>{title}</h1>
+      </div>
+      <div className='w-[100%] h-[80%] px-[5%] flex flex-col justify-start items-center'>
+        {inputs.map((input, index) => (
+          <div key={index} className='w-[100%] h-[14%] my-[1.5%] flex justify-center items-center'>
+            <input
+              type={input.type}
+              placeholder={input.placeholder}
+              className='border border-gray-300 w-[80%] rounded-3xl text-center h-[100%]'
+            />
+          </div>
+        ))}
+        <input
+          type="submit"
+          className={`w-[30%] h-[15%] mt-[1%] cursor-pointer rounded-3xl ${buttonBgColor} text-white hover:${buttonHoverColor}`}
+        />
+      </div>
+    </div>
+  );
+};
+
+
 const page = () => {
+
+  const commonGradient = 'bg-gradient-to-r from-cyan-500 to-blue-500';
+  const buttonBgColor = 'bg-blue-500';
+  const buttonHoverColor = 'bg-blue-700';
+
+
+  const cardData = [
+    {
+      title: "Age Check",
+      inputs: [{ type: 'number', placeholder: 'Enter the age of the applicant...' }],
+    },
+    {
+      title: "Bankruptcy Check",
+      inputs: [
+        { type: 'number', placeholder: 'Enter the year of occurrence...' },
+        { type: 'number', placeholder: 'Enter the amount owed...' }
+      ],
+    },
+    {
+      title: "Credit Rating Check",
+      inputs: [{ type: 'number', placeholder: 'Enter your credit rating...' }],
+    },
+    {
+      title: "Mortgages Check",
+      inputs: [
+        { type: 'number', placeholder: 'Enter age approval...' },
+        { type: 'number', placeholder: 'Enter CreditRating approval...' },
+        { type: 'number', placeholder: 'Enter Bankruptcy approval...' }
+      ],
+    },
+    {
+      title: "Mortgages-Process Check",
+      inputs: [
+        { type: 'number', placeholder: 'Enter your annual income...' },
+        { type: 'number', placeholder: 'Enter your property sales price...' },
+        { type: 'number', placeholder: 'Enter property age...' },
+        { type: 'number', placeholder: 'Enter property location...' }
+      ],
+    },
+  ];
+
   return (
     <>
       <div className='w-[100vw] h-[100vh] flex flex-wrap justify-center items-center  ' >
-        <div className='w-[25%] h-[40%] shadow-2xl rounded-xl m-[2%] ' >
-          <div className='w-[100%] h-[20%]  flex justify-center items-center ' >
-            <h1 className='text-2xl font-semibold ' >Age Check</h1>
-          </div>
-          <div className='w-[100%] h-[80%] px-[5%]  flex flex-col justify-start items-center ' >
-            <div className='w-[100%] h-[15%] my-[5%]  flex justify-start items-center ' >
-              <label htmlFor="" className='w-[20%] flex items-center justify-center font-semibold ' >Age : </label>
-              <input type="number" placeholder='Enter the age of the applicant...' className='border border-black w-[80%] rounded-3xl text-center h-[100%]' />
-            </div>
-            <input type="submit" className='w-[20%] h-[15%]  rounded-3xl bg-[#2596be] ' />
-          </div>
-        </div>
-        <div className='w-[25%] h-[40%] shadow-2xl rounded-xl m-[2%] ' >
-          <div className='w-[100%] h-[20%]  flex justify-center items-center ' >
-            <h1 className='text-2xl font-semibold ' >Bankrutcy Check</h1>
-          </div>
-          <div className='w-[100%] h-[80%] px-[5%]  flex flex-col justify-start items-center ' >
-            <div className='w-[100%] h-[15%] my-[5%]  flex justify-start items-center ' >
-              <label htmlFor="" className='w-[20%] flex items-center justify-center font-semibold ' >Year of Occurence : </label>
-              <input type="number" placeholder='Enter the year of occurence...' className='border border-black w-[80%] rounded-3xl text-center h-[100%]' />
-            </div>
-            <div className='w-[100%] h-[15%] my-[5%]  flex justify-start items-center ' >
-              <label htmlFor="" className='w-[20%] flex items-center justify-center font-semibold ' >Amount Owed : </label>
-              <input type="number" placeholder='Enter the amount owed...' className='border border-black w-[80%] rounded-3xl text-center h-[100%]' />
-            </div>
-            <input type="submit" className='w-[20%] h-[15%]  rounded-3xl bg-[#2596be] ' />
-          </div>
-        </div>
-        <div className='w-[25%] h-[40%] shadow-2xl rounded-xl m-[2%] ' ></div>
-        <div className='w-[25%] h-[40%] shadow-2xl rounded-xl m-[2%] ' ></div>
-        <div className='w-[25%] h-[40%] shadow-2xl rounded-xl m-[2%] ' ></div>
+        {cardData.map((card, index) => (
+          <Card
+            key={index}
+            title={card.title}
+            inputs={card.inputs}
+            gradient={commonGradient}
+            buttonBgColor={buttonBgColor}
+            buttonHoverColor={buttonHoverColor}
+          />
+        ))}
       </div>
     </>
   )
