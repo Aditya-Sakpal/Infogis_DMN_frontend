@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 const Card = ({ title, inputs, gradient, buttonBgColor, buttonHoverColor }) => {
+  
   return (
     <div className='w-[25%] h-[40%] shadow-2xl rounded-xl m-[2%] transition-all duration-300 hover:shadow-xl'>
       <div className={`w-[100%] h-[20%] ${gradient} flex justify-center items-center rounded-t-xl`}>
@@ -31,39 +32,40 @@ const page = () => {
   const commonGradient = 'bg-gradient-to-r from-cyan-500 to-blue-500';
   const buttonBgColor = 'bg-blue-500';
   const buttonHoverColor = 'bg-blue-700';
-
+  
+  
 
   const cardData = [
     {
       title: "Age Check",
-      inputs: [{ type: 'number', placeholder: 'Enter the age of the applicant...' }],
+      inputs: [{ type: 'number', placeholder: 'Enter the age of the applicant...',name:'age',function:'setAge' }],
     },
     {
       title: "Bankruptcy Check",
       inputs: [
-        { type: 'number', placeholder: 'Enter the year of occurrence...' },
-        { type: 'number', placeholder: 'Enter the amount owed...' }
+        { type: 'number', placeholder: 'Enter the year of occurrence...',name:'yearOfOccurence',function:'setYearOfOccurence' },
+        { type: 'number', placeholder: 'Enter the amount owed...',name:'amountOwed',function:'setAmountOwed' }
       ],
     },
     {
       title: "Credit Rating Check",
-      inputs: [{ type: 'number', placeholder: 'Enter your credit rating...' }],
+      inputs: [{ type: 'text', placeholder: 'Enter your credit rating...',name:'creditRating',function:'setCreditRating'}],
     },
     {
       title: "Mortgages Check",
       inputs: [
-        { type: 'number', placeholder: 'Enter age approval...' },
-        { type: 'number', placeholder: 'Enter CreditRating approval...' },
-        { type: 'number', placeholder: 'Enter Bankruptcy approval...' }
+        { type: 'boolean', placeholder: 'Enter age approval...' },
+        { type: 'boolean', placeholder: 'Enter CreditRating approval...' },
+        { type: 'boolean', placeholder: 'Enter Bankruptcy approval...' }
       ],
     },
     {
       title: "Mortgages-Process Check",
       inputs: [
-        { type: 'number', placeholder: 'Enter your annual income...' },
-        { type: 'number', placeholder: 'Enter your property sales price...' },
-        { type: 'number', placeholder: 'Enter property age...' },
-        { type: 'number', placeholder: 'Enter property location...' }
+        { type: 'number', placeholder: 'Enter your annual income...',name:'annualIncome',function:'setAnnualIncome' },
+        { type: 'number', placeholder: 'Enter your property sales price...',name:'propertySalesPrice',function:'setPropertySalesPrice' },
+        { type: 'number', placeholder: 'Enter property age...',name:'propertyAge',function:'setPropertyAge' },
+        { type: 'text', placeholder: 'Enter property location...',name:'propertyLocation',function:'setProperty'}
       ],
     },
   ];
