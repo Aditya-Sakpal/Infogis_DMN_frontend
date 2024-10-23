@@ -1,5 +1,6 @@
 "use client"
 import React, { useState } from 'react';
+import Swal from 'sweetalert2';
 
 const Card = ({ title, inputs, gradient, buttonBgColor, buttonHoverColor, handleChange, formData, handleSubmit }) => {
   return (
@@ -71,46 +72,66 @@ const Page = () => {
   const handleSubmit = async (e, title) => {
     e.preventDefault();
 
-    let apiUrl = '';
+    let apiUrl = "http://82.41.81.167:8888/kie-server/services/rest/server/containers/mortgages_1.0.0-SNAPSHOT/dmn";
     let requestData = {};
 
     // Step 5: Set the API URL based on the card title
     switch (title) {
       case "Age Check":
-        console.log(formData.age)
-        apiUrl = "https://82.41.81.167:8888/kie-server/services/rest/server/containers/mortgages_1.0.0-SNAPSHOT/dmn"; // Replace with actual API URL
         requestData = {
-          age: formData.age
+          "model-namespace": "https://kiegroup.org/dmn/_F0C8AA2C-3852-4024-9F15-F04830DBF4DC",
+          "model-name": "new_dmn_model",
+          "decision": "Age Approval",
+          "dmn-context": {
+            "Age": parseInt(formData.age,10)
+          }
         };
         break;
       case "Bankruptcy Check":
-        apiUrl = "/api/bankruptcy-check"; // Replace with actual API URL
         requestData = {
-          yearOfOccurence: formData.yearOfOccurence,
-          amountOwed: formData.amountOwed
+          "model-namespace": "https://kiegroup.org/dmn/_F0C8AA2C-3852-4024-9F15-F04830DBF4DC",
+          "model-name": "new_dmn_model",
+          "decision": "Bankruptcy Approval",
+          "dmn-context": {
+            "YearOfOccurence": parseInt(formData.yearOfOccurence,10),
+            "AmountOwed": parseInt(formData.amountOwed,10)
+          }
         };
         break;
       case "Credit Rating Check":
-        apiUrl = "/api/credit-rating-check"; // Replace with actual API URL
         requestData = {
-          creditRating: formData.creditRating
+          "model-namespace": "https://kiegroup.org/dmn/_F0C8AA2C-3852-4024-9F15-F04830DBF4DC",
+          "model-name": "new_dmn_model",
+          "decision": "CreditRating Approval",
+          "dmn-context": {
+            "CreditRating": formData.creditRating
+          }
         };
         break;
       case "Mortgages Check":
-        apiUrl = "/api/mortgages-check"; // Replace with actual API URL
         requestData = {
-          ageApproval: formData.ageApproval,
-          creditRatingApproval: formData.creditRatingApproval,
-          bankruptcyApproval: formData.bankruptcyApproval
+          "model-namespace": "https://kiegroup.org/dmn/_F0C8AA2C-3852-4024-9F15-F04830DBF4DC",
+          "model-name": "new_dmn_model",
+          "decision": "Main Approval",
+          "dmn-context": {
+            "Age Approval": formData.ageApproval,
+            "CreditRating Approval": formData.creditRatingApproval,
+            "Bankruptcy Approval": formData.bankruptcyApproval
+          }
         };
         break;
       case "Mortgages-Process Check":
-        apiUrl = "/api/mortgages-process-check"; // Replace with actual API URL
+        apiUrl="http://82.41.81.167:8888/kie-server/services/rest/server/containers/mortgage-process_1.0.0-SNAPSHOT/dmn";
         requestData = {
-          annualIncome: formData.annualIncome,
-          propertySalesPrice: formData.propertySalesPrice,
-          propertyAge: formData.propertyAge,
-          propertyLocation: formData.propertyLocation
+          "model-namespace": "https://kiegroup.org/dmn/_81B3F457-87AE-481A-8877-14391D242E93",
+          "model-name": "MorgateProcess_DMN",
+          "decision": "Mortgage Amount",
+          "dmn-context": {
+            "Applicant Annual Income": parseInt(formData.annualIncome, 10), // Convert to integer
+            "Property Sales Price": parseInt(formData.propertySalesPrice, 10), // Convert to integer
+            "Property Age": parseInt(formData.propertyAge, 10),
+            "Property Location": formData.propertyLocation
+          }
         };
         break;
       default:
@@ -120,15 +141,27 @@ const Page = () => {
 
     // Step 6: Make the API call
     try {
-      const response = await fetch(apiUrl, {
+      console.log(requestData)
+      const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+      const response = await fetch(proxyUrl + apiUrl, {
         method: 'POST',
         headers: {
+          'Authorization': 'Basic cmFkbWluOnJhZG1pbjU2NyE=',
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(requestData)
+        body: JSON.stringify(requestData),
+        mode: 'cors'
       });
       const result = await response.json();
-      console.log(result);
+      console.log(result)
+      const answer = result.result['dmn-evaluation-result']['dmn-context'][`${requestData?.decision}`];
+      console.log(answer);
+      Swal.fire({
+        title: 'Decision Result',
+        text: `${requestData.decision}: ${answer}`,
+        icon: 'success',
+        confirmButtonText: 'OK'
+      });
     } catch (error) {
       console.error("API request failed:", error);
     }
